@@ -1,12 +1,82 @@
 #!/usr/bin/env python
+
+"""This module serves as an example/reference script to assist in becoming comfortable with Ursina.
+
+Helpful links:
+    Docs: https://www.ursinaengine.org/documentation.html
+    API Reference: https://www.ursinaengine.org/api_reference.html
+    Example projects (Really helpful!): https://www.ursinaengine.org/documentation.html
+    How-To for first-time programmers: https://www.ursinaengine.org/ursina_for_dummies.html
+"""
 import logging
+
+from ursina import Entity, Ursina, color, held_keys, invoke, time
+
+
+class Player(Entity):
+    """Player character, a subclass of Ursina's Entity object.
+
+    Most things in ursina are Entities. An Entity is a thing you place in the world.
+    you can think of them as GameObjects in Unity or Actors in Unreal.
+    """
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def update(self):
+        """This will be called by the engine every frame if player is 'active'.
+
+        The player moves left or right based on our input.
+        to check which keys are held down, we can check the held_keys dictionary.
+        0 means not pressed and 1 means pressed.
+        time.dt is simply the time since the last frame. by multiplying with this, the
+        player will move at the same speed regardless of how fast the game runs.
+        """
+        self.x += held_keys["d"] * time.dt
+        self.x -= held_keys["a"] * time.dt
+
+    def input(self, key):
+        """Input handling, this is run when the game receives an input and player is 'active'."""
+        if key == "space":
+            self.y += 1
+            invoke(setattr, self, "y", self.y - 1, delay=0.25)
+
+
+def update():
+    """This runs every frame"""
+    pass
+
+
+def input(key):
+    """This runs every input"""
+    if key == "space":
+        logging.warning("Player probably jumped just now, but this runs too!")
 
 
 def main(x: int):
     """Main game loop"""
-    logging.info(f"Script runs. x was set to {x}.")
+    logging.warning(f"Script runs. x was set to {x}.")
+
+    # create a window
+    app = Ursina()
+
+    # the first parameter tells us the Entity's model will be a 3d-model called 'cube'.
+    # ursina includes some basic models like 'cube', 'sphere' and 'quad'.
+
+    # the next parameter tells us the model's color should be orange.
+
+    # 'scale_y=2' tells us how big the entity should be in the vertical axis, how tall it should be.
+    # in ursina, positive x is right, positive y is up, and positive z is forward.
+
+    Player(model="cube", color=color.orange, scale_y=2)
+
+    # start running the game
+    app.run()
 
 
 if __name__ == "__main__":
-    # If you replace this int with another type, pre-commit should fail due to MyPy.
+    # Note to Torben:
+    # If you replace this int with another type, it won't match the typehint
+    # set on the main function. This should cause pre-commit to fail due to the MyPy hook.
+    # Try changing that int to a string and comitting the code, an error should appear!
     main(5)
