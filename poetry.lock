@@ -20,7 +20,7 @@ wrapt = {version = ">=1.14,<2", markers = "python_version >= \"3.11\""}
 name = "attrs"
 version = "22.2.0"
 description = "Classes Without Boilerplate"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.6"
 files = [
@@ -209,6 +209,21 @@ python-versions = "*"
 files = [
     {file = "docopt-0.6.2.tar.gz", hash = "sha256:49b3a825280bd66b3aa83585ef59c4a8c82f2c8a522dbe754a8bc8d08c85c491"},
 ]
+
+[[package]]
+name = "exifread"
+version = "3.0.0"
+description = "Read Exif metadata from tiff and jpeg files."
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "ExifRead-3.0.0-py3-none-any.whl", hash = "sha256:2c5c59ef03b3bbee75b82b82d2498006b3c13509f35c9a76c7552faff73fa2d5"},
+    {file = "ExifRead-3.0.0.tar.gz", hash = "sha256:0ac5a364169dbdf2bd62f94f5c073970ab6694a3166177f5e448b10c943e2ca4"},
+]
+
+[package.extras]
+dev = ["mypy (==0.950)", "pylint (==2.13.8)"]
 
 [[package]]
 name = "filelock"
@@ -716,20 +731,20 @@ virtualenv = ">=20.10.0"
 
 [[package]]
 name = "psd-tools3"
-version = "1.9.2"
-description = "Fork of psd-tools for working with Photoshop PSD files"
+version = "1.8.2"
+description = "Fork of psd-tools for working with Adobe Photoshop PSD files"
 category = "main"
 optional = false
-python-versions = ">=3.7"
+python-versions = "*"
 files = [
-    {file = "psd-tools3-1.9.2.tar.gz", hash = "sha256:b46ba176c8c3765452f1202c6c6feebcf7dd35cdefab128576cfeeb1b7dd95d1"},
+    {file = "psd-tools3-1.8.2.tar.gz", hash = "sha256:3a03bb8c7757e477b5ab1a7a35e8d5064493655f08682779ec7d5ff610954440"},
 ]
 
 [package.dependencies]
-attrs = "*"
 docopt = ">=0.5"
+exifread = "*"
 packbits = "*"
-Pillow = "*"
+PyBundle = "*"
 
 [[package]]
 name = "psutil"
@@ -757,6 +772,17 @@ files = [
 
 [package.extras]
 test = ["enum34", "ipaddress", "mock", "pywin32", "wmi"]
+
+[[package]]
+name = "pybundle"
+version = "1.0.6"
+description = "Wrapper functions for adjusting paths in executable builds"
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "PyBundle-1.0.6.tar.gz", hash = "sha256:f6e7cc9eb4b0dec3b198c7f6a4f9d8db04be121033b1ea78468764f84b4c6a74"},
+]
 
 [[package]]
 name = "pycodestyle"
@@ -1205,4 +1231,4 @@ tokenize-rt = ">=2.1"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "b972913454fd66eadda9279ed7c5f31fe204e1f1db3f1813789a8f66c939072c"
+content-hash = "0b359ce33da32c60db498ec3d67e98cd413edb15c7ab05e3d3af27199f4e46ea"
