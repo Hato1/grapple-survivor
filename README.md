@@ -1,11 +1,26 @@
-# jamminwiththebois
+# Hookshot-survivor
 
-Setup:
+Hookshot Survivor is a gamejam project over easter 2023. It is our first interactions with the 3d game engine Ursina.
 
-Install Poetry
+### Setting up Hookshot-survivor for development/testing
 
-navigate to  project directory
+Project dependencies are managed with Poetry. [Install Poetry](https://python-poetry.org/docs/).
 
-run `poetry install` to install dependancies.
+In a command prompt:
 
-Now in future run `poetry shell` to enter project virtual environment for running code.
+1. Check you have poetry with `poetry --version`
+2. Navigate to this project directory `cd /path/to/git/repo`
+3. Run `poetry install` to install/update your virtual environment.
+4. Run `poetry shell` to enter project virtual environment.
+5. Run `pre-commit install` to add code checking/fixing on commit
+6. Run `./main` to begin the game
+
+
+
+### Running the game
+
+Ensure you've set up the game before on this computer.
+
+1. Navigate to this project directory `cd /path/to/git/repo`
+2. Run `poetry shell` to enter project virtual environment.
+3. Run `./main` to begin the game

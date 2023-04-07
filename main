@@ -1,0 +1,12 @@
+#!/usr/bin/env python
+import logging
+
+
+def main(x: int):
+    """Main game loop"""
+    logging.info(f"Script runs. x was set to {x}.")
+
+
+if __name__ == "__main__":
+    # If you replace this int with another type, pre-commit should fail due to MyPy.
+    main(5)

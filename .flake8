@@ -1,5 +1,5 @@
 [flake8]
-max-line-length = 88
+max-line-length = 120
 # mccabe config
 max-complexity = 12
 extend-exclude =

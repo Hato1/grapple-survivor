@@ -1,7 +1,7 @@
 # Global hooks
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.0.1
+    rev: v4.4.0
     hooks:
       - id: check-builtin-literals
       - id: check-case-conflict
@@ -21,7 +21,7 @@ repos:
       - id: trailing-whitespace
         exclude: fake_proximity/tkDNN-patches
   - repo: https://github.com/pre-commit/pygrep-hooks
-    rev: v1.9.0
+    rev: v1.10.0
     hooks:
       - id: python-check-blanket-noqa
       - id: python-check-blanket-type-ignore
@@ -33,13 +33,38 @@ repos:
       - id: rst-inline-touching-normal
       - id: text-unicode-replacement-char
   - repo: https://github.com/shellcheck-py/shellcheck-py
-    rev: v0.8.0.1
+    rev: v0.9.0.2
     hooks:
       - id: shellcheck
   - repo: local
     hooks:
-    - id: print_statements
-      name: Check for print statements
-      entry: '^\s*print\('
-      language: pygrep
-      types: [python]
+      - id: print_statements
+        name: Check for print statements
+        entry: '^\s*print\('
+        language: pygrep
+        types: [python]
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: 'v1.1.1'
+    hooks:
+      - id: mypy
+        args: [--no-strict-optional, --ignore-missing-imports]
+        additional_dependencies: [pydantic]
+  - repo: https://github.com/pycqa/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+        args: ["--profile", "black"]
+  - repo: https://github.com/psf/black
+    rev: 23.3.0
+    hooks:
+      - id: black
+        language_version: python3.11
+  - repo: https://github.com/pycqa/flake8
+    rev: 6.0.0
+    hooks:
+      - id: flake8
+        additional_dependencies: [flake8-bugbear]
+#  - repo: https://github.com/PyCQA/pydocstyle
+#    rev: 6.1.1
+#    hooks:
+#      - id: pydocstyle
