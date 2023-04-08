@@ -44,7 +44,6 @@ class CustomFirstPersonController(Entity):
         self.air_time = 0
         self.grapple = False
         self.grapple_direction = None
-        self.bullet = None
 
         for key, value in kwargs.items():
             setattr(self, key, value)
@@ -93,12 +92,12 @@ class CustomFirstPersonController(Entity):
 
         self.apply_gravity()
 
-        if held_keys["left mouse"]:
-            self.activate_grapple()
-        if (
-            held_keys["right mouse"] and self.bullet.state == Helpers.State.LOADED
-        ) or self.bullet.state == Helpers.State.FLYING:
+        if held_keys["left mouse"] and self.bullet.state == Helpers.State.LOADED:
             self.shoot()
+        elif held_keys["left mouse"] and self.bullet.state == Helpers.State.ANCHORED:
+            self.activate_grapple()
+        elif held_keys["right mouse"] and self.bullet.state == Helpers.State.ANCHORED:
+            self.recall_bullet()
 
     def apply_gravity(self):
         if self.gravity and not self.grapple:
@@ -176,8 +175,12 @@ class CustomFirstPersonController(Entity):
             self.bullet.enabled = True
             self.bullet.position = self.position
             self.bullet.position += self.camera_pivot.forward * time.dt * 300
+            self.bullet.position += Vec3(0, self.height - 0.1, 0)
             self.bullet.state = Helpers.State.FLYING
-        self.bullet.shoot(self.camera_pivot.forward)
+        self.bullet.shoot(self.camera_pivot.forward, False)
+
+    def recall_bullet(self):
+        self.bullet.recall(self.position)
 
 
 player = None
