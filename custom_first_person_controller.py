@@ -9,9 +9,12 @@ from ursina import (
     held_keys,
     invoke,
     mouse,
+    random,
     raycast,
     time,
 )
+
+import Helpers
 
 
 class CustomFirstPersonController(Entity):
@@ -39,6 +42,7 @@ class CustomFirstPersonController(Entity):
         self.air_time = 0
         self.grapple = False
         self.grapple_direction = None
+        self.bullet = None
 
         for key, value in kwargs.items():
             setattr(self, key, value)
@@ -127,10 +131,36 @@ class CustomFirstPersonController(Entity):
         self.air_time = 0
         self.grounded = True
 
-    def on_enable(self):
-        mouse.locked = True
-        self.cursor.enabled = True
+    def activate_grapple(self):
+        """Activates the grapple mode on the player"""
+        if not self.grapple:
+            self.grapple = True
+            from ursina.prefabs.ursfx import ursfx
 
-    def on_disable(self):
-        mouse.locked = False
-        self.cursor.enabled = False
+            ursfx(
+                [(0.0, 0.0), (0.1, 0.9), (0.15, 0.75), (0.3, 0.14), (0.6, 0.0)],
+                volume=0.5,
+                wave="noise",
+                pitch=random.uniform(-13, -12),
+                pitch_change=-12,
+                speed=1.0,
+            )
+            self.jumping = False
+            self.speed = 40
+            self.air_time = 0
+            self.grapple_direction = Vec3(self.camera_pivot.forward)
+            invoke(self.disable_grapple, delay=1)
+
+    def disable_grapple(self):
+        """Disables the grapple mode on the player"""
+        self.grapple = False
+        self.grapple_direction = None
+        self.speed = 12
+
+    def shoot(self):
+        if self.bullet.state == Helpers.State.LOADED:
+            self.bullet.enabled = True
+            self.bullet.position = self.position
+            self.bullet.position += self.camera_pivot.forward * time.dt * 300
+            self.bullet.state = Helpers.State.FLYING
+        self.bullet.shoot(self.camera_pivot.forward)
