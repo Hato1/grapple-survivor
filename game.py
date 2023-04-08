@@ -1,7 +1,7 @@
 from ursina import Entity, Ursina, color, random
 
+import enemy
 from custom_first_person_controller import create_player
-from enemy import FollowingFelicia
 
 app = Ursina()
 
@@ -24,7 +24,9 @@ for _i in range(16):
 
 
 def update():
-    FollowingFelicia.new_enemy()
+    if len(enemy.enemies) < 10:
+        if not enemy.enemies or enemy.enemies[-1].lifetime > 5:
+            enemy.FollowingFelicia.new_enemy()
 
 
 app.run()

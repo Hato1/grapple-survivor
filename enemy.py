@@ -53,6 +53,7 @@ texture_types = [
 
 class Enemy(Entity):
     def __init__(self, **kwargs):
+        self.creation_time = time.time()
         if "model" not in kwargs:
             kwargs["model"] = "sphere"
         if "texture" not in kwargs:
@@ -60,7 +61,7 @@ class Enemy(Entity):
         if "x" not in kwargs:
             kwargs["x"] = 0
         if "y" not in kwargs:
-            kwargs["y"] = 2
+            kwargs["y"] = 3
         if "z" not in kwargs:
             kwargs["z"] = 1
         super().__init__(**kwargs)
@@ -69,6 +70,11 @@ class Enemy(Entity):
     def new_enemy(cls):
         enemies.append(cls())
         return enemies[-1]
+
+    @property
+    def lifetime(self):
+        """Get how long this entity has existed in seconds."""
+        return time.time() - self.creation_time
 
 
 class FollowingFelicia(Enemy):
@@ -81,4 +87,4 @@ class FollowingFelicia(Enemy):
         self.look_at(custom_first_person_controller.player)
         move_amount = self.forward * time.dt * self.speed
         self.position += move_amount
-        self.speed *= 1.01
+        self.speed = min(self.speed + 0.01, 5)
