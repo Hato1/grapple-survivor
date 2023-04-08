@@ -1,7 +1,20 @@
-from ursina import held_keys, Vec3, Entity, camera, color, raycast, mouse, clamp, Vec2, time, invoke, curve
+from ursina import (
+    Entity,
+    Vec2,
+    Vec3,
+    camera,
+    clamp,
+    color,
+    curve,
+    held_keys,
+    invoke,
+    mouse,
+    raycast,
+    time,
+)
 
 
-class OurFirstPersonController(Entity):
+class CustomFirstPersonController(Entity):
     def __init__(self, **kwargs):
         self.cursor = Entity(parent=camera.ui, model="quad", color=color.pink, scale=0.008, rotation_z=45)
         super().__init__()
@@ -42,15 +55,14 @@ class OurFirstPersonController(Entity):
         self.camera_pivot.rotation_x -= mouse.velocity[1] * self.mouse_sensitivity[0]
         self.camera_pivot.rotation_x = clamp(self.camera_pivot.rotation_x, -90, 90)
 
-
         if not self.grapple:
             self.direction = Vec3(
                 self.forward * (held_keys["w"] - held_keys["s"]) + self.right * (held_keys["d"] - held_keys["a"])
             ).normalized()
-            print(self.direction)
+            # print(self.direction)
         else:
             self.direction = self.grapple_direction
-            print(self.direction)
+            # print(self.direction)
 
         feet_ray = raycast(self.position + Vec3(0, 0.5, 0), self.direction, ignore=(self,), distance=0.5, debug=False)
         head_ray = raycast(
@@ -71,7 +83,10 @@ class OurFirstPersonController(Entity):
 
             # self.position += self.direction * self.speed * time.dt
 
-        if self.gravity:
+        self.apply_gravity()
+
+    def apply_gravity(self):
+        if self.gravity and not self.grapple:
             # gravity
             ray = raycast(self.world_position + (0, self.height, 0), self.down, ignore=(self,))
             # ray = boxcast(self.world_position+(0,2,0), self.down, ignore=(self,))
