@@ -16,7 +16,7 @@ from ursina import (
 
 class CustomFirstPersonController(Entity):
     def __init__(self, **kwargs):
-        self.cursor = Entity(parent=camera.ui, model="quad", color=color.pink, scale=0.008, rotation_z=45)
+        self.cursor = Entity(parent=camera.ui, model="circle", color=color.black, scale=0.008, rotation_z=45)
         super().__init__()
         self.speed = 5
         self.height = 2
@@ -59,10 +59,8 @@ class CustomFirstPersonController(Entity):
             self.direction = Vec3(
                 self.forward * (held_keys["w"] - held_keys["s"]) + self.right * (held_keys["d"] - held_keys["a"])
             ).normalized()
-            # print(self.direction)
         else:
             self.direction = self.grapple_direction
-            # print(self.direction)
 
         feet_ray = raycast(self.position + Vec3(0, 0.5, 0), self.direction, ignore=(self,), distance=0.5, debug=False)
         head_ray = raycast(

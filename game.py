@@ -1,5 +1,16 @@
-from ursina import BoxCollider, Entity, Ursina, Vec3, color, held_keys, invoke, random
+from ursina import (
+    BoxCollider,
+    Entity,
+    Ursina,
+    Vec3,
+    color,
+    held_keys,
+    invoke,
+    random,
+    time,
+)
 
+import Helpers
 from Bullet import Bullet
 from custom_first_person_controller import CustomFirstPersonController
 
@@ -8,6 +19,7 @@ player = CustomFirstPersonController(model="cube", z=-10, color=color.orange, or
 player.collider = BoxCollider(player, Vec3(0, 1, 0), Vec3(1, 2, 1))
 ground = Entity(model="plane", collider="box", scale=128, texture="grass", texture_scale=(4, 4))
 bullet = Bullet(model="cube", collider="box", scale=1, texture="brick", texture_scale=(4, 4))
+bullet.enabled = False
 
 # Creates the blocks around the map
 for _i in range(16):
@@ -54,14 +66,21 @@ def disable_grapple(playerobj: CustomFirstPersonController):
 
 
 def shoot():
+    if bullet.state == Helpers.State.LOADED:
+        bullet.enabled = True
+        bullet.position = player.position
+        bullet.position += player.camera_pivot.forward * time.dt * 300
+        bullet.state = Helpers.State.FLYING
     bullet.shoot(player.camera_pivot.forward)
 
 
 def update():
     if held_keys["left mouse"]:
         grapple()
-    if held_keys["right mouse"]:
+    if (held_keys["right mouse"] and bullet.state == Helpers.State.LOADED) or bullet.state == Helpers.State.FLYING:
         shoot()
+    if held_keys["r"] and bullet.state == Helpers.State.ANCHORED:
+        bullet.reload()
 
 
 app.run()
