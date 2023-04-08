@@ -22,7 +22,7 @@ def grapple():
             speed=1.0,
         )
 
-        player.grapple_direction = Vec3(mouse.point)
+        player.grapple_direction = Vec3(player.camera_pivot.forward)
         invoke(disable_grapple, player, delay=1)
 
 

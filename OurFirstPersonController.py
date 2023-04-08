@@ -13,6 +13,7 @@ class OurFirstPersonController(Entity):
         camera.position = (0, 0, 0)
         camera.rotation = (0, 0, 0)
         camera.fov = 90
+
         mouse.locked = True
         self.mouse_sensitivity = Vec2(40, 40)
 
@@ -40,6 +41,7 @@ class OurFirstPersonController(Entity):
 
         self.camera_pivot.rotation_x -= mouse.velocity[1] * self.mouse_sensitivity[0]
         self.camera_pivot.rotation_x = clamp(self.camera_pivot.rotation_x, -90, 90)
+
 
         if not self.grapple:
             self.direction = Vec3(
