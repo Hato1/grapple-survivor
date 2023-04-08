@@ -1,13 +1,12 @@
 from ursina import Entity, Ursina, color, random
 
 from custom_first_person_controller import create_player
-from enemy import Enemy
+from enemy import FollowingFelicia
 
 app = Ursina()
 
 ground = Entity(model="plane", collider="box", scale=128, texture="grass", texture_scale=(4, 4))
 create_player()
-Enemy.new_enemy()
 # Creates the blocks around the map
 for _i in range(16):
     Entity(
@@ -25,7 +24,7 @@ for _i in range(16):
 
 
 def update():
-    pass
+    FollowingFelicia.new_enemy()
 
 
 app.run()

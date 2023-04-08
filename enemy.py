@@ -1,4 +1,6 @@
 """Module for managing hostile creatures."""
+import random
+
 from ursina import Entity, time
 
 import custom_first_person_controller
@@ -54,7 +56,7 @@ class Enemy(Entity):
         if "model" not in kwargs:
             kwargs["model"] = "sphere"
         if "texture" not in kwargs:
-            kwargs["texture"] = "rainbow"
+            kwargs["texture"] = random.choice(texture_types)
         if "x" not in kwargs:
             kwargs["x"] = 0
         if "y" not in kwargs:
@@ -72,8 +74,11 @@ class Enemy(Entity):
 class FollowingFelicia(Enemy):
     def __init__(self):
         super().__init__()
+        self.speed = 1.0
 
     def update(self):
+        """Move toward player and accelerate"""
         self.look_at(custom_first_person_controller.player)
-        move_amount = self.direction * time.dt * self.speed
+        move_amount = self.forward * time.dt * self.speed
         self.position += move_amount
+        self.speed *= 1.01
