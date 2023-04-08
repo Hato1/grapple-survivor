@@ -26,6 +26,9 @@ class Bullet(Entity):
         self.state = Helpers.State.LOADED
         self.enabled = False
 
+    def recall(self):
+        self.state = Helpers.State.RECALL
+
     def update(self):
         if held_keys["r"] and self.state == Helpers.State.ANCHORED:
             self.reload()

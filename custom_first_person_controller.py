@@ -146,7 +146,7 @@ class CustomFirstPersonController(Entity):
 
     def activate_grapple(self):
         """Activates the grapple mode on the player"""
-        if not self.grapple:
+        if not self.grapple and self.bullet.state is Helpers.State.ANCHORED:
             self.grapple = True
             from ursina.prefabs.ursfx import ursfx
 
@@ -159,9 +159,9 @@ class CustomFirstPersonController(Entity):
                 speed=1.0,
             )
             self.jumping = False
-            self.speed = 40
+            self.speed = 1
             self.air_time = 0
-            self.grapple_direction = Vec3(self.camera_pivot.forward)
+            self.grapple_direction = Vec3(self.bullet.position - self.position)
             invoke(self.disable_grapple, delay=1)
 
     def disable_grapple(self):
@@ -169,6 +169,7 @@ class CustomFirstPersonController(Entity):
         self.grapple = False
         self.grapple_direction = None
         self.speed = 12
+        self.bullet.reload()
 
     def shoot(self):
         if self.bullet.state == Helpers.State.LOADED:
