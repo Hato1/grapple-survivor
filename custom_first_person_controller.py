@@ -1,4 +1,5 @@
 from ursina import (
+    BoxCollider,
     Entity,
     Vec2,
     Vec3,
@@ -15,6 +16,7 @@ from ursina import (
 )
 
 import Helpers
+from Bullet import Bullet
 
 
 class CustomFirstPersonController(Entity):
@@ -53,6 +55,10 @@ class CustomFirstPersonController(Entity):
             if ray.hit:
                 self.y = ray.world_point.y
 
+        bullet = Bullet(model="cube", collider="box", scale=1, texture="brick", texture_scale=(4, 4))
+        bullet.enabled = False
+        self.bullet = bullet
+
     def update(self):
         self.rotation_y += mouse.velocity[0] * self.mouse_sensitivity[1]
 
@@ -86,6 +92,13 @@ class CustomFirstPersonController(Entity):
             # self.position += self.direction * self.speed * time.dt
 
         self.apply_gravity()
+
+        if held_keys["left mouse"]:
+            self.activate_grapple()
+        if (
+            held_keys["right mouse"] and self.bullet.state == Helpers.State.LOADED
+        ) or self.bullet.state == Helpers.State.FLYING:
+            self.shoot()
 
     def apply_gravity(self):
         if self.gravity and not self.grapple:
@@ -164,3 +177,12 @@ class CustomFirstPersonController(Entity):
             self.bullet.position += self.camera_pivot.forward * time.dt * 300
             self.bullet.state = Helpers.State.FLYING
         self.bullet.shoot(self.camera_pivot.forward)
+
+
+player = None
+
+
+def create_player():
+    global player
+    player = CustomFirstPersonController(model="cube", z=-10, color=color.orange, origin_y=-0.5, speed=16)
+    player.collider = BoxCollider(player, Vec3(0, 1, 0), Vec3(1, 2, 1))

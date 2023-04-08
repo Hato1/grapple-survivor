@@ -1,4 +1,4 @@
-from ursina import Entity, Vec3, raycast, time
+from ursina import Entity, Vec3, held_keys, raycast, time
 
 import Helpers
 
@@ -25,3 +25,7 @@ class Bullet(Entity):
     def reload(self):
         self.state = Helpers.State.LOADED
         self.enabled = False
+
+    def update(self):
+        if held_keys["r"] and self.state == Helpers.State.ANCHORED:
+            self.reload()
