@@ -10,13 +10,14 @@ class Bullet(Entity):
         self.state = Helpers.State.LOADED
         self.line = Entity(model="cube", scale=10, texture="circle_outlined", texture_scale=(4, 4))
         self.player_position = None
+        self.line.enabled = False
 
     def shoot(self, camera_direction: Vec3, recalling: bool):
         if self.direction is None:
             self.direction = Vec3(camera_direction)
         bullet_ray = raycast(self.position + Vec3(0, 0.5, 0), self.direction, ignore=(self,), distance=1, debug=False)
         if not bullet_ray.hit:
-            self.position += self.direction * time.dt * 12
+            self.position += self.direction * time.dt * 36
         elif recalling:
             self.reload()
         else:
@@ -32,9 +33,17 @@ class Bullet(Entity):
         self.direction = None
         self.line.enabled = False
 
-    def recall(self):
+    def recall_start(self):
         self.state = Helpers.State.RECALL
         self.direction = Vec3(self.player_position - self.position)
+
+    def recall(self):
+        self.direction = Vec3(self.player_position - self.position)
+        bullet_ray = raycast(self.position + Vec3(0, 0.5, 0), self.direction, ignore=(self,), distance=1, debug=False)
+        if not bullet_ray.hit:
+            self.position += self.direction * time.dt * 12
+        else:
+            self.reload()
 
     def cast_line(self):
         self.line.enabled = True
@@ -55,7 +64,7 @@ class Bullet(Entity):
             self.shoot(self.direction, False)
             self.update_line()
         if self.state == Helpers.State.RECALL:
-            self.shoot(self.direction, True)
+            self.recall()
             self.update_line()
         if self.state == Helpers.State.ANCHORED:
             self.update_line()
