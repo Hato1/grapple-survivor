@@ -14,6 +14,7 @@ from ursina import (
     raycast,
     time,
 )
+from ursina.prefabs.health_bar import HealthBar
 
 import Helpers
 from Bullet import Bullet
@@ -44,6 +45,8 @@ class CustomFirstPersonController(Entity):
         self.air_time = 0
         self.grapple = False
         self.grapple_direction = None
+
+        self.health_bar = HealthBar(max_value=5)
 
         for key, value in kwargs.items():
             setattr(self, key, value)
