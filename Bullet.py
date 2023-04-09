@@ -8,7 +8,7 @@ class Bullet(Entity):
         super().__init__(**kwargs)
         self.direction = None
         self.state = Helpers.State.LOADED
-        self.line = Entity(model="cube", scale=10, texture="circle_outlined", texture_scale=(4, 4))
+        self.line = Entity(model="cube", scale=10, texture="rainbow", color=(1, 1, 1, 1))
         self.player_position = None
         self.line.enabled = False
 
@@ -54,7 +54,9 @@ class Bullet(Entity):
             (self.position.y + self.player_position.y) / 2,
             (self.position.z + self.player_position.z) / 2,
         )
-        self.line.scale = (0.2, 0.2, distance(self.player_position, self.position))
+        dist = distance(self.player_position, self.position)
+        self.line.scale = (0.2, 0.2, dist)
+        self.line.texture_scale = (dist / 10, dist / 10)
         self.line.look_at(self.player_position)
 
     def update(self):
