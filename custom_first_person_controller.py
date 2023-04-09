@@ -74,24 +74,22 @@ class CustomFirstPersonController(Entity):
         else:
             self.direction = self.grapple_direction
 
-        feet_ray = raycast(self.position + Vec3(0, 0.5, 0), self.direction, ignore=(self,), distance=0.5, debug=False)
+        feet_ray = raycast(self.position + Vec3(0, 0.5, 0), self.direction, ignore=(self,), distance=0.8, debug=False)
         head_ray = raycast(
-            self.position + Vec3(0, self.height - 0.1, 0), self.direction, ignore=(self,), distance=0.5, debug=False
+            self.position + Vec3(0, self.height - 0.1, 0), self.direction, ignore=(self,), distance=0.8, debug=False
         )
         if not feet_ray.hit and not head_ray.hit:
             move_amount = self.direction * time.dt * self.speed
 
-            if raycast(self.position + Vec3(-0.0, 1, 0), Vec3(1, 0, 0), distance=0.5, ignore=(self,)).hit:
+            if raycast(self.position + Vec3(-0.0, 1, 0), Vec3(1, 0, 0), distance=1, ignore=(self,)).hit:
                 move_amount[0] = min(move_amount[0], 0)
-            if raycast(self.position + Vec3(-0.0, 1, 0), Vec3(-1, 0, 0), distance=0.5, ignore=(self,)).hit:
+            if raycast(self.position + Vec3(-0.0, 1, 0), Vec3(-1, 0, 0), distance=1, ignore=(self,)).hit:
                 move_amount[0] = max(move_amount[0], 0)
-            if raycast(self.position + Vec3(-0.0, 1, 0), Vec3(0, 0, 1), distance=0.5, ignore=(self,)).hit:
+            if raycast(self.position + Vec3(-0.0, 1, 0), Vec3(0, 0, 1), distance=1, ignore=(self,)).hit:
                 move_amount[2] = min(move_amount[2], 0)
-            if raycast(self.position + Vec3(-0.0, 1, 0), Vec3(0, 0, -1), distance=0.5, ignore=(self,)).hit:
+            if raycast(self.position + Vec3(-0.0, 1, 0), Vec3(0, 0, -1), distance=1, ignore=(self,)).hit:
                 move_amount[2] = max(move_amount[2], 0)
             self.position += move_amount
-
-            # self.position += self.direction * self.speed * time.dt
 
         self.apply_gravity()
 
@@ -99,7 +97,7 @@ class CustomFirstPersonController(Entity):
             self.shoot()
         elif held_keys["left mouse"] and self.bullet.state == Helpers.State.ANCHORED:
             self.activate_grapple()
-        elif held_keys["right mouse"] and self.bullet.state == Helpers.State.ANCHORED:
+        elif held_keys["right mouse"] and self.bullet.state in (Helpers.State.ANCHORED, Helpers.State.FLYING):
             self.recall_bullet()
 
         self.bullet.player_position = self.position
@@ -187,7 +185,7 @@ class CustomFirstPersonController(Entity):
         self.bullet.update_line()
 
     def recall_bullet(self):
-        self.bullet.recall()
+        self.bullet.recall_start()
 
 
 player = None
