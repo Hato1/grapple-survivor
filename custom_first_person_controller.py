@@ -99,6 +99,8 @@ class CustomFirstPersonController(Entity):
         elif held_keys["right mouse"] and self.bullet.state == Helpers.State.ANCHORED:
             self.recall_bullet()
 
+        self.bullet.player_position = self.position
+
     def apply_gravity(self):
         if self.gravity and not self.grapple:
             # gravity
@@ -177,10 +179,12 @@ class CustomFirstPersonController(Entity):
             self.bullet.position += self.camera_pivot.forward * time.dt * 300
             self.bullet.position += Vec3(0, self.height - 0.1, 0)
             self.bullet.state = Helpers.State.FLYING
+            self.bullet.cast_line()
         self.bullet.shoot(self.camera_pivot.forward, False)
+        self.bullet.update_line()
 
     def recall_bullet(self):
-        self.bullet.recall(self.position)
+        self.bullet.recall()
 
 
 player = None
