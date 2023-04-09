@@ -29,4 +29,9 @@ def update():
             enemy.FollowingFelicia.new_enemy()
 
 
+def input(key):
+    if key == "q":
+        quit()
+
+
 app.run()
