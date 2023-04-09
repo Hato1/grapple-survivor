@@ -60,6 +60,8 @@ class Bullet(Entity):
         self.line.look_at(self.player_position)
 
     def update(self):
+        if self.direction is not None:
+            self.look_at(self.position + self.direction * time.dt * 12)
         if held_keys["r"] and self.state == Helpers.State.ANCHORED:
             self.reload()
         if self.state == Helpers.State.FLYING:

@@ -57,7 +57,7 @@ class CustomFirstPersonController(Entity):
             if ray.hit:
                 self.y = ray.world_point.y
 
-        bullet = Bullet(model="cube", collider="box", scale=1, texture="brick", texture_scale=(4, 4))
+        bullet = Bullet(model="cube", collider="box", scale=(0.3, 0.3, 1.5), texture="shore", texture_scale=(4, 4))
         bullet.enabled = False
         self.bullet = bullet
 
@@ -106,7 +106,6 @@ class CustomFirstPersonController(Entity):
         if self.gravity and not self.grapple:
             # gravity
             ray = raycast(self.world_position + (0, self.height, 0), self.down, ignore=(self,))
-            # ray = boxcast(self.world_position+(0,2,0), self.down, ignore=(self,))
 
             if ray.distance <= self.height + 0.1:
                 if not self.grounded:
