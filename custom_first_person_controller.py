@@ -192,5 +192,5 @@ player = None
 
 def create_player():
     global player
-    player = CustomFirstPersonController(model="cube", z=-10, color=color.orange, origin_y=-0.5, speed=16)
+    player = CustomFirstPersonController(model="cube", color=color.orange, speed=16)
     player.collider = BoxCollider(player, Vec3(0, 1, 0), Vec3(1, 2, 1))
