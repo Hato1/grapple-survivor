@@ -44,6 +44,7 @@ class Chunk:
 
 Chunk()
 create_player()
+enemy.Walleye()
 
 
 def update():

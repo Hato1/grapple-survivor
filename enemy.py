@@ -1,5 +1,5 @@
 """Module for managing hostile creatures."""
-from ursina import Entity, destroy, distance, time
+from ursina import Entity, Sprite, destroy, distance, time
 
 import custom_first_person_controller
 
@@ -90,3 +90,22 @@ class FollowingFelicia(Enemy):
         if distance(self, custom_first_person_controller.player) < 5:
             custom_first_person_controller.player.health_bar.value -= 1
             destroy(self)
+
+
+class Walleye(Sprite):
+    """The Wall spans the entire corridor and moves through it."""
+
+    def __init__(self, **kwargs):
+        # Todo: set y to half height of the chunk. Hardcoding it here for now :(
+        super().__init__(
+            model="scardinius.obj",
+            texture="fish.png",
+            y=16 / 2,
+            z=-10,
+            rotation_y=180,
+            **kwargs,
+        )
+        self.speed = 0.01
+
+    def update(self):
+        self.z += self.speed
