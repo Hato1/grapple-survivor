@@ -108,4 +108,5 @@ class Walleye(Sprite):
         self.speed = 0.01
 
     def update(self):
+
         self.z += self.speed
